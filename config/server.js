@@ -1,3 +1,4 @@
+/* eslint-env node */
 /* eslint-disable no-process-env */
 
 // localhost:8081 is the sewing-kit default for dev server

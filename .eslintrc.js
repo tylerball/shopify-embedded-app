@@ -3,7 +3,11 @@ module.exports = {
     'plugin:shopify/react',
     'plugin:shopify/polaris',
     'plugin:shopify/jest',
+    'plugin:shopify/webpack',
   ],
+  rules: {
+    'import/no-unresolved': 'off',
+  },
   overrides: [
     {
       files: ['*.test.*'],

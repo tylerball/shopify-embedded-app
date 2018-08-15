@@ -14,4 +14,6 @@ function HomeRoutes({match}) {
   );
 }
 
+HomeRoutes.propTypes = RouteComponentProps;
+
 export default compose(withRouter)(HomeRoutes);

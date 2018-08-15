@@ -1,3 +1,4 @@
+/* global module:false */
 import renderApp from './render-app';
 import App from '../app';
 

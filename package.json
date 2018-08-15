@@ -22,6 +22,7 @@
     "apollo-boost": "^0.1.10",
     "dotenv": "^6.0.0",
     "graphql": "^0.13.2",
+    "isomorphic-fetch": "^2.2.1",
     "koa": "^2.5.1",
     "koa-session": "^5.8.1",
     "react": "^16.4.1",
@@ -40,6 +41,7 @@
     "graphql-fixtures": "^0.2.2",
     "jest-enzyme": "^6.0.2",
     "lodash.merge": "^4.6.1",
-    "ngrok": "^3.0.1"
+    "ngrok": "^3.0.1",
+    "react-hot-loader": "^4.3.4"
   }
 }

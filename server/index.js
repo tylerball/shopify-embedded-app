@@ -9,11 +9,9 @@ import {ip, port} from '../config/server';
 import config from '../config/app';
 import renderApp from './render-app';
 
-let app;
-
-(async () => {
+const appExport = (async () => {
   const {apiKey, secret, scopes, hostName} = await config();
-  app = new Koa();
+  const app = new Koa();
   app.keys = [secret];
 
   app.use(session(app));
@@ -45,6 +43,7 @@ let app;
     console.log(`[init] listening on ${ip}:${port}`);
   });
 
+  return app;
 })();
 
-export default app;
+export default appExport;
