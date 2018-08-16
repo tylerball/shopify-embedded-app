@@ -8,6 +8,7 @@ import HTML, {DOCTYPE} from '@shopify/react-html';
 
 import {vendorBundleUrl} from '../config/server';
 import App from '../app';
+import config from '../config/app';
 
 const assetsPath = resolve(__dirname, '../build/client/assets.json');
 
@@ -16,10 +17,19 @@ export default function renderApp(ctx: Context) {
   const scripts =
     // eslint-disable-next-line no-process-env
     process.env.NODE_ENV === 'development'
-      ? [{path: vendorBundleUrl}, ...js]
+      ? [{path: vendorBundleUrl}, ...js.map((entry) => {
+        return {
+          path: entry.path.replace('http://localhost:8080', ''),
+        };
+      })]
       : js;
 
   const context = {};
+
+  const data = {
+    apiKey: config.apiKey,
+    shopOrigin: config.hostName,
+  };
 
   try {
     ctx.status = 200;
@@ -27,7 +37,7 @@ export default function renderApp(ctx: Context) {
       DOCTYPE +
       renderToString(
         // eslint-disable-next-line react/jsx-pascal-case
-        <HTML scripts={scripts} styles={css}>
+        <HTML scripts={scripts} styles={css} data={data}>
           <StaticRouter location={ctx.request.url} context={context}>
             <App />
           </StaticRouter>

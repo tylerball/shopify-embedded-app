@@ -1,49 +1,66 @@
+/* eslint-disable no-console */
 import 'isomorphic-fetch';
 
 import * as Koa from 'koa';
 import * as session from 'koa-session';
 import shopifyAuth, {verifyRequest} from '@shopify/koa-shopify-auth';
 import graphQLProxy from '@shopify/koa-shopify-graphql-proxy';
+import proxy from 'koa-proxies';
+import {pathExistsSync, readFileSync} from 'fs-extra';
 
-import {ip, port} from '../config/server';
+import {ip, port, tunnelFile} from '../config/server';
 import config from '../config/app';
 import renderApp from './render-app';
 
-const appExport = (async () => {
-  const {apiKey, secret, scopes, hostName} = await config();
-  const app = new Koa();
-  app.keys = [secret];
+process.on('unhandledRejection', (error) => console.log(error));
 
-  app.use(session(app));
+const {apiKey, secret, scopes, hostName} = config;
+const app = new Koa();
+app.keys = [secret];
 
-  app.use(
-    shopifyAuth({
-      apiKey,
-      secret,
-      scopes,
-      afterAuth(ctx) {
-        ctx.redirect('/');
-      },
-    }),
-  );
+app.use(session(app));
 
-  app.use(graphQLProxy());
+app.use(
+  shopifyAuth({
+    apiKey,
+    secret,
+    scopes,
+    afterAuth(ctx) {
+      ctx.redirect('/');
+    },
+  }),
+);
 
-  const fallbackRoute = hostName === '' ? undefined : `/auth?shop=${hostName}`;
-  app.use(
-    verifyRequest({
-      fallbackRoute,
-    }),
-  );
+app.use(proxy('/webpack', {
+  target: 'http://localhost:8080',
+  logs: true,
+}));
 
-  app.use(renderApp);
+app.use(graphQLProxy());
 
+const fallbackRoute = hostName === '' ? undefined : `/auth?shop=${hostName}`;
+app.use(
+  verifyRequest({
+    fallbackRoute,
+  }),
+);
+
+app.use(renderApp);
+
+if (process.env.NODE_ENV === 'development') {
   app.listen(port, () => {
-    // eslint-disable-next-line no-console
+    console.log(`[init] listening on ${ip}:${port}`);
+    if (pathExistsSync(tunnelFile)) {
+      const url = readFileSync(tunnelFile).toString();
+      console.log(`App accessible via ${url}`);
+    } else {
+      console.log('Run `yarn tunnel` in another terminal to use your access your app from a development shop.');
+    }
+  });
+} else {
+  app.listen(port, () => {
     console.log(`[init] listening on ${ip}:${port}`);
   });
+}
 
-  return app;
-})();
-
-export default appExport;
+export default app;

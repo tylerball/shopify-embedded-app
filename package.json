@@ -9,7 +9,8 @@
     "type-check": "sewing-kit type-check",
     "format": "sewing-kit format",
     "build": "sewing-kit build",
-    "nuke": "sewing-kit nuke"
+    "nuke": "sewing-kit nuke",
+    "tunnel": "node server/tunnel.js"
   },
   "dependencies": {
     "@shopify/javascript-utilities": "^2.1.0",
@@ -24,6 +25,7 @@
     "graphql": "^0.13.2",
     "isomorphic-fetch": "^2.2.1",
     "koa": "^2.5.1",
+    "koa-proxies": "^0.7.0",
     "koa-session": "^5.8.1",
     "react": "^16.4.1",
     "react-apollo": "^2.1.9",
@@ -37,7 +39,7 @@
     "@shopify/sewing-kit": "^0.53.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "fs-extra": "^6.0.1",
+    "fs-extra": "^7.0.0",
     "graphql-fixtures": "^0.2.2",
     "jest-enzyme": "^6.0.2",
     "lodash.merge": "^4.6.1",

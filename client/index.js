@@ -2,7 +2,7 @@
 import renderApp from './render-app';
 import App from '../app';
 
-const appContainer: HTMLElement | null = document.getElementById('app');
+const appContainer = document.getElementById('app');
 
 renderApp(appContainer, App);
 

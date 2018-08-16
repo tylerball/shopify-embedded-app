@@ -3,10 +3,7 @@ import * as ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
 import {BrowserRouter} from 'react-router-dom';
 
-export default function renderApp(
-  appContainerElement: HTMLElement | null,
-  App: React.ComponentType,
-) {
+export default function renderApp(appContainerElement, App) {
   if (appContainerElement) {
     ReactDOM.hydrate(
       <AppContainer>

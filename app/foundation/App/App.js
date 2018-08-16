@@ -3,6 +3,7 @@ import ApolloClient from 'apollo-boost';
 import {ApolloProvider} from 'react-apollo';
 
 import {AppProvider} from '@shopify/polaris';
+import {getSerialized} from '@shopify/react-serialize';
 import Link from '../Link';
 import Routes from '../Routes';
 
@@ -12,12 +13,33 @@ const client = new ApolloClient({
   },
 });
 
-export default function App() {
-  return (
-    <ApolloProvider client={client}>
-      <AppProvider linkComponent={Link}>
-        <Routes />
-      </AppProvider>
-    </ApolloProvider>
-  );
+export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {workaround: false};
+  }
+
+  componentDidMount() {
+    // This happens in browser - therefore we are ready to use `window`
+    this.setState({workaround: true});
+  }
+
+  render() {
+    if (!this.state.workaround) {
+      return <div />;
+    }
+
+    return (
+      <ApolloProvider client={client}>
+        <AppProvider
+          apiKey={getSerialized('apiKey').data}
+          shopOrigin={`https://${getSerialized('shopOrigin').data}`}
+          linkComponent={Link}
+          forceRedirect
+        >
+          <Routes />
+        </AppProvider>
+      </ApolloProvider>
+    );
+  }
 }
