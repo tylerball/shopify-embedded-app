@@ -5,8 +5,8 @@ import * as Koa from 'koa';
 import * as session from 'koa-session';
 import shopifyAuth, {verifyRequest} from '@shopify/koa-shopify-auth';
 import graphQLProxy from '@shopify/koa-shopify-graphql-proxy';
-import proxy from 'koa-proxies';
 import {pathExistsSync, readFileSync} from 'fs-extra';
+import httpProxy from 'http-proxy';
 
 import {ip, port, tunnelFile} from '../config/server';
 import config from '../config/app';
@@ -31,10 +31,16 @@ app.use(
   }),
 );
 
-app.use(proxy('/webpack', {
-  target: 'http://localhost:8080',
-  logs: true,
-}));
+const proxy = httpProxy.createProxyServer();
+
+app.use((ctx, next) => {
+  if (/^\/webpack\//.test(ctx.path)) {
+    ctx.respond = false;
+    proxy.web(ctx.req, ctx.res, {target: 'http://localhost:8080'});
+  } else {
+    return next();
+  }
+});
 
 app.use(graphQLProxy());
 
@@ -47,8 +53,9 @@ app.use(
 
 app.use(renderApp);
 
+let server;
 if (process.env.NODE_ENV === 'development') {
-  app.listen(port, () => {
+  server = app.listen(port, () => {
     console.log(`[init] listening on ${ip}:${port}`);
     if (pathExistsSync(tunnelFile)) {
       const url = readFileSync(tunnelFile).toString();
@@ -58,9 +65,13 @@ if (process.env.NODE_ENV === 'development') {
     }
   });
 } else {
-  app.listen(port, () => {
+  server = app.listen(port, () => {
     console.log(`[init] listening on ${ip}:${port}`);
   });
 }
+
+server.on('upgrade', (req, socket, head) => {
+  proxy.ws(req, socket, head, {target: 'http://localhost:8080'});
+});
 
 export default app;
