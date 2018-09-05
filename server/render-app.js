@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Context} from 'koa';
 import {resolve} from 'path';
 import {readJSONSync} from 'fs-extra';
 import {renderToString} from 'react-dom/server';
@@ -12,7 +11,7 @@ import config from '../config/app';
 
 const assetsPath = resolve(__dirname, '../build/client/assets.json');
 
-export default function renderApp(ctx: Context) {
+export default function renderApp(ctx) {
   const {js, css} = readJSONSync(assetsPath).entrypoints.main;
   const scripts =
     // eslint-disable-next-line no-process-env
@@ -28,7 +27,7 @@ export default function renderApp(ctx: Context) {
 
   const data = {
     apiKey: config.apiKey,
-    shopOrigin: config.hostName,
+    shopOrigin: ctx.params ? ctx.params.shop : config.hostName,
   };
 
   try {
