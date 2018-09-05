@@ -230,6 +230,12 @@
     "@shopify/react-serialize" "^1.0.6"
     react-helmet "^5.2.0"
 
+"@shopify/react-serialize@^1.0.0":
+  version "1.0.0"
+  resolved "https://packages.shopify.io/shopify/node/npm/@shopify/react-serialize/-/react-serialize-1.0.0.tgz#794ef64ec3e4d7dd930f30dc7b2141f95c06c06d"
+  dependencies:
+    serialize-javascript "^1.5.0"
+
 "@shopify/react-serialize@^1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@shopify/react-serialize/-/react-serialize-1.0.6.tgz#35c95eaae3a6b1cb75f483e3f832cd57c895d92b"
