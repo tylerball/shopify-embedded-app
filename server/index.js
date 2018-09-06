@@ -36,7 +36,7 @@ const proxy = httpProxy.createProxyServer();
 app.use((ctx, next) => {
   if (/^\/webpack\//.test(ctx.path)) {
     ctx.respond = false;
-    proxy.web(ctx.req, ctx.res, {target: 'http://localhost:8080'});
+    return proxy.web(ctx.req, ctx.res, {target: 'http://localhost:8080'});
   } else {
     return next();
   }
