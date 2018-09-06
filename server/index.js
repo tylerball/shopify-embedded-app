@@ -42,14 +42,14 @@ app.use((ctx, next) => {
   }
 });
 
-app.use(graphQLProxy());
-
 const fallbackRoute = hostName === '' ? undefined : `/auth?shop=${hostName}`;
 app.use(
   verifyRequest({
     fallbackRoute,
   }),
 );
+
+app.use(graphQLProxy());
 
 app.use(renderApp);
 

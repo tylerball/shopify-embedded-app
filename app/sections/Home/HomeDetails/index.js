@@ -1,4 +1,3 @@
-import HomeDetails from './HomeDetails';
+import CodeDetails from './CodeDetails';
 
-export {Props} from './HomeDetails';
-export default HomeDetails;
+export default CodeDetails;

@@ -27,7 +27,7 @@ export default function renderApp(ctx) {
 
   const data = {
     apiKey: config.apiKey,
-    shopOrigin: ctx.params ? ctx.params.shop : ctx.session.shop,
+    shopOrigin: ctx.request.query.shop ? ctx.request.query.shop : ctx.session.shop,
   };
 
   try {

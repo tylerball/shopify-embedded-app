@@ -36,6 +36,7 @@ export default class App extends React.Component {
           shopOrigin={`https://${getSerialized('shopOrigin').data}`}
           linkComponent={Link}
           forceRedirect
+          debug
         >
           <Routes />
         </AppProvider>
