@@ -3,7 +3,8 @@ import QRCode from 'qrcode';
 import {Page, Layout, Card, Button} from '@shopify/polaris';
 import {getSerialized} from '@shopify/react-serialize';
 import {ResourcePicker} from '@shopify/polaris/embedded';
-import './CodeDetails.scss';
+
+import * as styles from './CodeDetails.scss';
 
 export default class HomeDetails extends React.Component {
   constructor() {
@@ -44,7 +45,7 @@ export default class HomeDetails extends React.Component {
         </a>
       </p>
     ) : (
-      <p className="Placeholder">Generated QR Code will appear here</p>
+      <p className={styles.Placeholder}>Generated QR Code will appear here</p>
     );
 
     return (
